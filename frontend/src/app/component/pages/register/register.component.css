@@ -1,0 +1,11 @@
+  
+  .custom-btn{
+    background: linear-gradient(to right, #3b82f6, #6b21a8) !important ;
+    color: white !important;
+  }
+
+p, h1, h2, h3, h4, h5, h6,label,button, a {
+
+    font-family: "Open Sans", serif !important;
+}
+ 

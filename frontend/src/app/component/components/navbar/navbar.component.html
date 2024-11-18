@@ -1,0 +1,119 @@
+<nav class="fixed top-0 left-0 w-full z-50 bg-white text-black shadow-md">
+  <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+    <!-- Project Name -->
+    <div class="text-2xl font-bold" routerLink="/home">
+      {{ title }}
+    </div>
+
+    <!-- Hamburger Icon for Mobile -->
+    <button
+      class="lg:hidden p-2 rounded-md hover:bg-gray-200 focus:outline-none"
+      (click)="toggleMenu()"
+      *ngIf="!isLoggedIn"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
+
+    <!-- Links (Desktop) -->
+    <div
+      class="hidden lg:flex space-x-6 items-center"
+      *ngIf="!isLoggedIn"
+    >
+      <a
+        routerLink=""
+        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
+        >Home</a
+      >
+      <a
+        routerLink="/signup"
+        class="text-black font-medium px-3 py-2 rounded-md bg-yellow-500 hover:bg-yellow-700"
+        >Register</a
+      >
+      <a
+        routerLink="/login"
+        class="text-black font-medium px-3 py-2 rounded-md bg-yellow-500 hover:bg-yellow-700"
+        >Login</a
+      >
+    </div>
+
+    <!-- Profile Picture for Logged-in Users -->
+    <button
+      class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 lg:mr-4 focus:outline-none"
+      *ngIf="isLoggedIn"
+      (click)="toggleProfilePanel()"
+    >
+    <mat-icon diameter="24">person</mat-icon>
+      <!-- <img
+        [src]="userProfileImage"
+        
+        alt="Profile"
+        class="w-full h-full object-cover"
+      /> -->
+    </button>
+  </div>
+
+  <!-- Side Panel for Profile -->
+  <div
+    class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out nav-panel"
+    [ngClass]="{ 'translate-x-0': isProfilePanelOpen, 'translate-x-full': !isProfilePanelOpen }"
+  >
+    <div class="p-4 flex items-center justify-between border-b">
+      <span class="text-xl font-bold">Profile Menu</span>
+      <button
+        class="p-2 rounded-md hover:bg-gray-200 focus:outline-none"
+        (click)="toggleProfilePanel()"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+    </div>
+    <div class="flex flex-col p-4 space-y-4 nav-panel">
+      <a
+        routerLink="/home"
+        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
+        >Home</a
+      >
+      <a
+        routerLink="/profile"
+        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
+        >View Profile</a
+      >
+      <a
+        routerLink="/settings"
+        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
+        >Settings</a
+      >
+      <button
+        (click)="logout()"
+        class="text-white font-medium px-3 py-2 rounded-md bg-red-500 hover:bg-red-700"
+      >
+        Logout
+      </button>
+    </div>
+  </div>
+</nav>

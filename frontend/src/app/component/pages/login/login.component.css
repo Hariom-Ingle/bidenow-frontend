@@ -1,0 +1,16 @@
+/* login.component.css (Optional for additional styles) */
+.error-message {
+    color: red;
+    font-size: 0.875rem;
+  }
+  
+  .success-message {
+    color: green;
+    font-size: 0.875rem;
+  }
+  
+
+  .custom-btn{
+    background: linear-gradient(to right, #3b82f6, #6b21a8) !important ;
+    color: white !important;
+  }

@@ -1,0 +1,141 @@
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-tr from-blue-50 to-blue-200">
+  <div class="flex flex-col md:flex-row overflow-hidden w-full max-w-6xl">
+    <!-- Left Section -->
+    <div class="flex flex-col justify-center p-8 bg-transparent md:w-1/2">
+      <h2 class="text-2xl font-bold text-gray-800 mb-4">Welcome to AuctionPro!</h2>
+      <p class="text-gray-600 text-lg mb-6">
+        Your trusted online auction platform to bid, sell, and shop with ease.
+      </p>
+      <ul class="space-y-4">
+        <li class="flex items-center">
+          <mat-icon class="text-blue-500 mr-2">gavel</mat-icon>
+          Participate in live auctions instantly.
+        </li>
+        <li class="flex items-center">
+          <mat-icon class="text-blue-500 mr-2">security</mat-icon>
+          Secure transactions for peace of mind.
+        </li>
+        <li class="flex items-center">
+          <mat-icon class="text-blue-500 mr-2">group</mat-icon>
+          Connect with a global community of buyers.
+        </li>
+      </ul>
+    </div>
+
+    <!-- Right Section -->
+    <div class="p-10 md:w-1/2 bg-white shadow-md rounded-lg">
+      <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+        Create Your Free Account
+      </h1>
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="space-y-4 md:space-y-3 mt-6">
+        <!-- Username -->
+        <div>
+          <label for="username" class="block mb-2 text-sm font-semibold text-gray-900">
+            Username
+          </label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            [(ngModel)]="userData.username"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter your username"
+          />
+        </div>
+
+        <!-- Email -->
+        <div>
+          <label for="email" class="block mb-2 text-sm font-semibold text-gray-900">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            [(ngModel)]="userData.email"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="name@company.com"
+          />
+        </div>
+
+        <!-- Password -->
+        <div>
+          <label for="password" class="block mb-2 text-sm font-semibold text-gray-900">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            [(ngModel)]="userData.password"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="••••••••"
+          />
+        </div>
+
+        <!-- Profile Image -->
+        <div>
+          <label for="profileImage" class="block mb-2 text-sm font-semibold text-gray-900">
+            Profile Image
+          </label>
+          <input
+            type="file"
+            id="profileImage"
+            name="profileImage"
+            accept="image/*"
+            (change)="onFileSelected($event)"
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+
+        <!-- User Type -->
+        <div>
+         
+          <div class="flex items-center space-x-4">
+            <label class="flex items-center">
+              <input
+                type="radio"
+                name="userType"
+                value="bidder"
+             
+                required
+                class="mr-2"
+              />
+              Bidder
+            </label>
+            <label class="flex items-center">
+              <input
+                type="radio"
+                name="userType"
+                value="seller"
+                
+                required
+                class="mr-2"
+              />
+              Seller
+            </label>
+          </div>
+        </div>
+
+        <div *ngIf="errorMessage" class="mb-4 text-red-500 text-sm">
+          {{ errorMessage }}
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="w-full text-white bg-gradient-to-r from-blue-500 to-purple-700 focus:ring-4 hover:from-blue-600 hover:to-purple-800 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 text-center custom-btn"
+        >
+          Create an Account
+        </button>
+      </form>
+      <p class="text-sm text-gray-500 mt-4">
+        Already have an account?
+        <a routerLink="/login" class="font-medium text-blue-500 hover:underline">Login here</a>.
+      </p>
+    </div>
+  </div>
+</div>
