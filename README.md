@@ -3,8 +3,7 @@
 # **Overview**:
 BidNow is a platform designed to deliver a seamless and real-time auction experience for users. The first milestone focuses on building a robust authentication system, including user login, registration, password management, and an organized repository setup.
 
-## Milestone 1: User Authentication
-  
+## Milestone 1: User Authentication  
 ## Features:
 1. **Registration:** User sign-up with validations.
 5. **Verify Email:** Secure email verification.
@@ -14,6 +13,26 @@ BidNow is a platform designed to deliver a seamless and real-time auction experi
 4. **Reset Password:** Password reset using email or OTP.
 6. **Repo Design:** Create a visually appealing and organized repository.
 ---
+
+## Milestone 2: Auction Listings and Bidding
+
+## Features:
+
+1.  **Auction Listings:** Create, Read, Update, and Delete auction listings.
+
+2.  **Bidding Actions:** Place bids and fetch bid history with validation.
+
+3. **Database Schema Extension:** Store auction details and bid histories.
+
+4. **Dynamic Forms for Auction Creation:** Allow users to create auctions with media uploads.
+
+5. **Real-Time Bidding:** Live updates and interactive bid features.
+
+6. **Countdown Timers:** Display real-time countdown timers for auctions.
+
+---
+
+
 
 ## Commands to Handle the Project:
 

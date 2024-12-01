@@ -1,0 +1,161 @@
+<div class="flex items-center justify-center min-h-screen bg-gradient-to-tr from-blue-50 to-blue-200 pt-14">
+    <div class="flex flex-col justify-center md:flex-row overflow-hidden w-full max-w-6xl  ">
+      <!-- <div class="flex flex-col justify-center p-8 bg-transparent md:w-1/2">
+        <h2 class="text-2xl font-bold text-gray-800 mb-4">Create Auction</h2>
+        <p class="text-gray-600 text-lg mb-6">
+          Set up your auction by filling in the details below.
+        </p>
+        <ul class="space-y-4">
+          <li class="flex items-center">
+            <mat-icon class="text-blue-500 mr-2">gavel</mat-icon>
+            Set a starting bid.
+          </li>
+          <li class="flex items-center">
+            <mat-icon class="text-blue-500 mr-2">category</mat-icon>
+            Specify the auction category.
+          </li>
+          <li class="flex items-center">
+            <mat-icon class="text-blue-500 mr-2">image</mat-icon>
+            Upload an image of the item.
+          </li>
+        </ul>
+      </div> -->
+  
+      <!-- Right Section (Auction Form) -->
+      <div class="p-10 md:w-1/2 bg-white shadow-md rounded-lg mt-10">
+        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
+          Auction Details
+        </h1>
+        <form (ngSubmit)="onSubmit()" #auctionForm="ngForm" class="space-y-4 md:space-y-3 mt-6">
+          <!-- Title -->
+          <div>
+            <label for="title" class="block mb-2 text-sm font-semibold text-gray-900">Title</label>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              [(ngModel)]="auctionData.title"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter auction title"
+            />
+          </div>
+  
+          <!-- Category -->
+          <div>
+            <label for="category" class="block mb-2 text-sm font-semibold text-gray-900">Category</label>
+            <select
+              id="category"
+              name="category"
+              [(ngModel)]="auctionData.category"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="electronics">Electronics</option>
+              <option value="furniture">Furniture</option>
+              <option value="clothing">Clothing</option>
+              <option value="watches">Watches</option>
+              <option value="art">Art</option>
+            </select>
+          </div>
+  
+          <!-- Description -->
+          <div>
+            <label for="description" class="block mb-2 text-sm font-semibold text-gray-900">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              [(ngModel)]="auctionData.description"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="4"
+              placeholder="Enter item description"
+            ></textarea>
+          </div>
+  
+          <!-- Starting Bid -->
+          <div>
+            <label for="startingBid" class="block mb-2 text-sm font-semibold text-gray-900">Starting Bid</label>
+            <input
+              type="number"
+              id="startingBid"
+              name="startingBid"
+              [(ngModel)]="auctionData.startingBid"
+              required
+              class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter starting bid"
+            />
+          </div>
+  
+          <!-- Auction Times -->
+          <div class="flex space-x-4">
+            <div class="w-1/2">
+              <label for="startTime" class="block mb-2 text-sm font-semibold text-gray-900">Auction Start Time</label>
+              <input
+                type="datetime-local"
+                id="startTime"
+                name="startTime"
+                [(ngModel)]="auctionData.startTime"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div class="w-1/2">
+              <label for="endTime" class="block mb-2 text-sm font-semibold text-gray-900">Auction End Time</label>
+              <input
+                type="datetime-local"
+                id="endTime"
+                name="endTime"
+                [(ngModel)]="auctionData.endTime"
+                required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+  
+          <!-- Auction Item Image -->
+        <!-- Auction Item Image -->
+<div>
+  <label for="image" class="block mb-2 text-sm font-semibold text-gray-900">
+    Image
+  </label>
+  <input
+    type="file"
+    id="image"
+    (change)="onFileSelected($event)"
+    accept="image/*"
+    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer focus:outline-none px-4 py-2"
+  />
+</div>
+
+<!-- Image Preview -->
+<div *ngIf="imagePreview" class="mt-4">
+  <p class="text-sm font-semibold text-gray-900 mb-2">Selected Image:</p>
+  <img [src]="imagePreview" alt="Preview" class="w-full max-w-sm rounded-lg shadow-md" />
+</div>
+
+  
+          <!-- Error Message -->
+          <div *ngIf="errorMessage" class="mb-4 text-red-500 text-sm">
+            {{ errorMessage }}
+          </div>
+  
+          <!-- Submit Button -->
+          <button [disabled]="loading"
+            type="submit"
+            class="w-full text-white bg-gradient-to-r from-blue-500 to-purple-700 focus:ring-4 hover:from-blue-600 hover:to-purple-800 focus:outline-none focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 text-center custom-btn"
+          >
+          <span *ngIf="loading">Submitting...</span>
+          <span *ngIf="!loading"> Create Auction</span>
+            
+          </button>
+        </form>
+
+<div *ngIf="loading" class="loading-indicator">
+  <!-- You can replace this with a spinner -->
+  <p>Processing your request...</p>
+</div>
+      </div>
+    </div>
+  </div>
+  

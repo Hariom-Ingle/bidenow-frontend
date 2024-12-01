@@ -1,0 +1,41 @@
+<section class="bg-gradient-to-r from-blue-50 to-blue-200 text-gray-800 h-screen">
+    <div class="container mt-10 mx-auto ">
+      <h1 class="text-3xl font-bold text-center text-gray-900 mb-8 pt-8">Auction Leaderboard</h1>
+      <!-- Table container -->
+      <div class="overflow-x-auto">
+        <table class="table-auto border-collapse w-4/5 mx-auto text-left">
+          <!-- Table header -->
+          <thead class="bg-gray-200">
+            <tr>
+              <th class="px-4 py-2 border-b border-gray-300">Profile No.</th>
+              <th class="px-4 py-2 border-b border-gray-300">Name</th>
+              <th class="px-4 py-2 border-b border-gray-300">Bid</th>
+              <th class="px-4 py-2 border-b border-gray-300">Expenditure</th>
+              <th class="px-4 py-2 border-b border-gray-300">Winner</th>
+            </tr>
+          </thead>
+          <!-- Table body -->
+          <tbody>
+            <tr 
+              *ngFor="let element of dataSource" 
+              class="odd:bg-white even:bg-gray-50 hover:bg-gray-100"
+            >
+              <td class="px-4 py-2 border-b border-gray-300 text-[#4B6BA5]">{{ element.profileNo }}</td>
+              <td class="px-4 py-2 border-b border-gray-300 text-[#EC7C0C]">{{ element.name }}</td>
+              <td class="px-4 py-2 border-b border-gray-300 text-[#67A357]">{{ element.bid | currency }}</td>
+              <td class="px-4 py-2 border-b border-gray-300">{{ element.expenditure | currency }}</td>
+              <td class="px-4 py-2 border-b border-gray-300">
+                <span
+                  class="inline-flex items-center rounded-md px-2 py-1 text-xs font-medium ring-1 ring-inset"
+                  [ngClass]="element.winner ? 'bg-green-50 text-green-700 ring-green-600/20' : 'bg-red-50 text-red-700 ring-red-600/20'"
+                >
+                  {{ element.winner ? 'Yes' : 'No' }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  

@@ -1,59 +1,81 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
-import crypto from "crypto";
-
+import { v2 as cloudinary } from "cloudinary";
 import { generateTokenAndSetCookie } from "../utils/generateTokenAndSetCookie.js";
-import { sendPasswordResetEmail, sendResetSuccessEmail, sendverificationEmail, sendWelcomeEmail } from "../mailtrap/email.js";
-
+import { sendverificationEmail } from "../mailtrap/email.js";
 
 dotenv.config();
 
 /********************* USER REGISTER ********************/
 export const register = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { username, email, password, role } = req.body;
 
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: "Missing required fields", success: false });
+        // Validate required fields
+        if (!username || !email || !password || !role) {
+            return res.status(400).json({ success: false, message: "Missing required fields" });
         }
 
+        // Check if the user already exists
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists", success: false });
+            return res.status(400).json({ success: false, message: "User already exists" });
         }
 
+        // Validate and upload profile image
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: "Profile image is required" });
+        }
+
+        const allowedFormats = ["image/jpeg", "image/png", "image/webp"];
+        if (!allowedFormats.includes(req.file.mimetype)) {
+            return res.status(400).json({ success: false, message: "File format not supported" });
+        }
+
+        const cloudinaryResponse = await cloudinary.uploader.upload(req.file.path, {
+            folder: "AUCTION_PLATFORM_USERS",
+        });
+
+        if (!cloudinaryResponse || cloudinaryResponse.error) {
+            return res.status(500).json({ success: false, message: "Failed to upload image to Cloudinary" });
+        }
+
+        // Hash password and generate verification token
         const hashedPassword = await bcrypt.hash(password, 10);
         const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
 
+        // Create and save the user
         const user = new User({
             username,
             email,
             password: hashedPassword,
+            profileImage: {
+                public_id: cloudinaryResponse.public_id,
+                url: cloudinaryResponse.secure_url,
+            },
+            role,
             verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000
-
+            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // Expires in 24 hours
         });
 
         await user.save();
+
+        // Generate token, set cookie, and send verification email
         generateTokenAndSetCookie(res, user._id);
-        await sendverificationEmail(user.email, verificationToken);
+        // await sendverificationEmail(user.email, verificationToken);
 
         return res.status(201).json({
-            message: "User created successfully",
             success: true,
-            user: { ...user._doc, password: undefined }
+            message: "User created successfully",
+            user: { ...user._doc, password: undefined },
         });
     } catch (error) {
-        if (error.name === 'ValidationError') {
-            const extractedMessage = error.message.split(':').slice(2).join(':').trim();
-            console.log(extractedMessage);
-            return res.status(400).json({ message: extractedMessage, success: false });
-        }
-
-        res.status(500).json({ error: error.message });
+        console.error(error);
+        res.status(500).json({ success: false, message: error.message });
     }
 };
+
 
 /********************* VERIFY EMAIL ********************/
 
@@ -91,10 +113,10 @@ export const verifyEmail = async (req, res) => {
 
 export const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, role } = req.body;
 
         // Check for missing fields
-        if (!email || !password) {
+        if (!email || !password || !role) {
             return res.status(400).json({ message: "Missing required fields", success: false });
         }
 
@@ -102,6 +124,11 @@ export const login = async (req, res) => {
         const user = await User.findOne({ email });
         if (!user) {
             return res.status(400).json({ message: "User does not exist", success: false });
+        }
+
+        const  isroleMatch = user.role === role;
+        if (!isroleMatch) {
+            return res.status(400).json({ message: "User role does not match", success: false });
         }
 
         // Check password
@@ -112,11 +139,8 @@ export const login = async (req, res) => {
 
         // Generate JWT token
         generateTokenAndSetCookie(res, user._id);
-
         user.lastLogin = Date.now();
-
         await user.save();
-
         res.status(200).json({ message: "User logged in successfully", success: true, user: { ...user._doc, password: undefined } });
 
 
@@ -142,6 +166,20 @@ export const logout = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const getProfile = async (req, res) =>{
+    try {
+        const user = await User.findById(req.userId).select("-password");
+        
+        if(!user){
+            return res.status(400).json({message:"user not found",success:false})
+        }
+        res.status(200).json({success:true,user })
+    } catch (error) {
+        console.log("error in check  auth", error);
+        res.status(500).json({ error: error.message });
+    }
+}
 
 
 /********************* FORGOT PASSWORD ********************/
@@ -181,7 +219,7 @@ export const forgotPassword = async (req, res) => {
 };
 
 
-/********************* FORGOT PASSWORD ********************/
+/********************* RESET PASSWORD ********************/
 
 export const resetPassword = async (req, res) => {
     try {
@@ -212,7 +250,7 @@ export const resetPassword = async (req, res) => {
     }
 }
 
-/********************* FORGOT PASSWORD ********************/
+/********************* CHECK AUTH ********************/
 
 export const checkAuth = async (req,res)=>{
     try {
@@ -227,3 +265,15 @@ export const checkAuth = async (req,res)=>{
         res.status(500).json({ error: error.message });
     }
 }
+
+/********************* LEADERBOARD  ********************/
+
+
+export  const  fetchLeaderboard = async(req,res)=>{
+
+    const users = await  User.find({moneySpent:{$gt:0}});
+    const leaderboard= users.sort((a,b)=>b.moneySpent - a.moneySpent)
+    return res.status(200).json({ leaderboard });
+
+}
+

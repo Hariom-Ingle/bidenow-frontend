@@ -1,18 +1,32 @@
 import express from "express";
-import { register, login, logout, verifyEmail, forgotPassword, resetPassword, checkAuth ,} from "../controllers/user.controller.js";
+import multer from "multer";
+import {
+    register,
+    login,
+    logout,
+    verifyEmail,
+    forgotPassword,
+    resetPassword,
+    checkAuth,
+    getProfile,
+    fetchLeaderboard,
+} from "../controllers/user.controller.js";
 import { verifyToken } from "../middleware/verifyToken.js";
+
 const router = express.Router();
 
-router.get("/check-auth",verifyToken,checkAuth)
+// Multer configuration
+const storage = multer.diskStorage({});
+const upload = multer({ storage });
 
-router.route("/register").post(register);
-router.route("/login").post(login);
-router.route("/logout").post( logout);
-
-router.route("/verify-email").post( verifyEmail);
-
-router.route("/forgot-password").post(forgotPassword);
-router.route("/reset-password/:token").post(resetPassword);
-
+router.get("/check-auth", verifyToken, checkAuth);
+router.post("/register", upload.single("profileImage"), register);
+router.post("/login", login);
+router.post("/logout", logout);
+router.get("/profile", verifyToken, getProfile);
+router.post("/verify-email", verifyEmail);
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
+router.get("/leaderboard", fetchLeaderboard);
 
 export default router;

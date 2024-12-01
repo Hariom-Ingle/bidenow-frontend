@@ -1,16 +1,13 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import {MatIconModule} from '@angular/material/icon';
-
- 
+import { Router } from '@angular/router';
+import { SharedImports } from '../../shared/shared-imports';
+// import { AuthServiceService } from '../../services/auth-service.service';
+import { AuthServiceService } from '../../../services/auth-service.service';
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule,RouterLink ,MatIconModule ], // Import HttpClientModule
+  imports: [...SharedImports],
+  providers: [AuthServiceService], 
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -19,40 +16,43 @@ export class RegisterComponent {
     username: '',
     email: '',
     password: '',
+    role: '', // User role (bidder/seller)
   };
-
+  profileImage: File | null = null; // Holds the selected profile image file
   errorMessage: string | null = null;
 
-  private apiUrl = 'http://localhost:5000/api/user/register'; // Backend API URL
+  constructor(private router: Router, private authService: AuthServiceService) {}
 
-  constructor(private router: Router, private http: HttpClient) {}
-
+  // Handle file input change
   onFileSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      // You can store the file in `userData` or process it as needed
-      console.log('Selected file:', file);
-      // this.userData.profileImage = file;
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.profileImage = input.files[0];
     }
   }
+
   onSubmit(): void {
-    if (this.userData.username && this.userData.email && this.userData.password) {
-      this.errorMessage = null;
-
-      this.http.post(this.apiUrl, this.userData).subscribe({
-        next: (response) => {
-          console.log('Registration successful:', response);
-          this.router.navigate(['/verify-email']);
-        },
-
-        error: (error) => {
-          console.error('Registration error:', error);
-          this.errorMessage = error?.error?.message || 'Registration failed. Please try again.';
-        },
-      });
+    if (
+      this.userData.username &&
+      this.userData.email &&
+      this.userData.password &&
+      this.userData.role &&
+      this.profileImage
+    ) {
+      this.authService
+        .registerUser(this.userData, this.profileImage)
+        .subscribe({
+          next: (response) => {
+            console.log('Registration successful:', response);
+            this.router.navigate(['/verify-email']);
+          },
+          error: (error) => {
+            console.error('Registration error:', error);
+            this.errorMessage = error?.error?.message || 'Registration failed.';
+          },
+        });
     } else {
-      this.errorMessage = 'Please fill in all fields correctly.';
+      this.errorMessage = 'All fields are required, including profile image.';
     }
   }
 }

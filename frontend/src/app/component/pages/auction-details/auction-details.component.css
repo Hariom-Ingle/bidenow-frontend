@@ -1,0 +1,17 @@
+@keyframes textHighlight {
+    0% {
+      color: rgb(0, 0, 0);
+      color: rgb(247, 0, 0);
+    }
+  
+    100% {
+      color: rgb(3, 101, 0);
+    }
+  }
+  
+  .highlight-text {
+    animation: textHighlight 1s infinite; /* Animation runs forever */
+    padding: 0 4px; /* Optional padding for better visibility */
+    border-radius: 4px; /* Optional for rounded corners */
+  }
+  

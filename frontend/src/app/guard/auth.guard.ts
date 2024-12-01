@@ -1,22 +1,19 @@
-// import { Injectable } from '@angular/core';
-// import { CanActivate, Router } from '@angular/router';
-// import {jwtDecode} from 'jwt-decode';
+import { Injectable } from '@angular/core';
+import { CanActivate, Router } from '@angular/router';
+import { UserService } from '../services/user.service';
 
-// @Injectable({
-//   providedIn: 'root',
-// })
-// export class AuthGuard implements CanActivate {
-//   constructor(private router: Router) {}
+@Injectable({
+  providedIn: 'root',
+})
+export class AuthGuard implements CanActivate {
+  constructor(private userService: UserService, private router: Router) {}
 
-//   canActivate(): boolean {
-//     const token = localStorage.getItem('authToken');
-//     if (token) {
-//       const decoded: any = jwtDecode(token);
-//       if (decoded.exp * 1000 > Date.now()) {
-//         return true;
-//       }
-//     }
-//     this.router.navigate(['/login']);
-//     return false;
-//   }
-// }
+  canActivate(): boolean {
+    if (this.userService.isLoggedIn()) {
+      return true;
+    } else {
+      this.router.navigate(['/login']);
+      return false;
+    }
+  }
+}

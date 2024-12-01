@@ -1,119 +1,100 @@
-<nav class="fixed top-0 left-0 w-full z-50 bg-white text-black shadow-md">
+<nav class="fixed top-0 left-0 w-full z-50 bg-gradient-to-r from-blue-500 to-purple-700 shadow-md">
   <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-    <!-- Project Name -->
-    <div class="text-2xl font-bold" routerLink="/home">
+    <!-- Logo -->
+    <div class="text-2xl font-bold text-white cursor-pointer" routerLink="/home">
       {{ title }}
     </div>
 
-    <!-- Hamburger Icon for Mobile -->
-    <button
-      class="lg:hidden p-2 rounded-md hover:bg-gray-200 focus:outline-none"
-      (click)="toggleMenu()"
-      *ngIf="!isLoggedIn"
-    >
-      <svg
-        class="w-6 h-6"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M4 6h16M4 12h16M4 18h16"
-        ></path>
-      </svg>
-    </button>
 
-    <!-- Links (Desktop) -->
+    <div *ngIf="!isLoggedIn">
+      <input class="border-2 py-2 rounded-lg outline-yellow-500 bg-slate-200 px-2 w-80" type="text" name=""
+        placeholder="Search auction Item ">
+    </div>
+
+    <div class="flex justify-center  align-center gap-4">
+      <div class="  lg:flex space-x-6 items-center" *ngIf="!isLoggedIn">
+        <a routerLink="/" class="text-white hover:text-gray-200 font-medium transition duration-300">Home</a>
+        <a routerLink="/signup"
+          class="bg-yellow-600 text-white font-medium px-4 py-2 rounded-md shadow-lg hover:opacity-90 transition">Register</a>
+        <a routerLink="/login"
+          class="bg-yellow-600 text-white font-medium px-4 py-2 rounded-md shadow-lg hover:opacity-90 transition">Login</a>
+      </div>
+
+      <button class="w-10 h-10 rounded-full overflow-hidden border-2 border-white lg:mr-4 focus:outline-none"
+        *ngIf="isLoggedIn" (click)="toggleProfilePanel()">
+        <img [src]="userProfileImage" alt="Profile" />
+      </button>
+
+    </div>
+    <!-- Profile Picture for Logged-In Users -->
+
+
+  </div>
+
+  <!-- Profile Panel -->
+  <div class="flex  flex-row">
     <div
-      class="hidden lg:flex space-x-6 items-center"
-      *ngIf="!isLoggedIn"
-    >
-      <a
-        routerLink=""
-        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
-        >Home</a
-      >
-      <a
-        routerLink="/signup"
-        class="text-black font-medium px-3 py-2 rounded-md bg-yellow-500 hover:bg-yellow-700"
-        >Register</a
-      >
-      <a
-        routerLink="/login"
-        class="text-black font-medium px-3 py-2 rounded-md bg-yellow-500 hover:bg-yellow-700"
-        >Login</a
-      >
-    </div>
+      class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out"
+      [ngClass]="{ 'translate-x-0': isProfilePanelOpen, 'translate-x-full': !isProfilePanelOpen }">
+      <div class="flex items-center justify-between px-6 pb-2 py-2 border-b">
+        <!-- Logo & Title -->
+        <div class="flex items-center space-x-2">
 
-    <!-- Profile Picture for Logged-in Users -->
-    <button
-      class="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 lg:mr-4 focus:outline-none"
-      *ngIf="isLoggedIn"
-      (click)="toggleProfilePanel()"
-    >
-    <mat-icon diameter="24">person</mat-icon>
-      <!-- <img
-        [src]="userProfileImage"
-        
-        alt="Profile"
-        class="w-full h-full object-cover"
-      /> -->
-    </button>
+          <span class="text-2xl font-bold text-yellow-600">BidNow</span>
+        </div>
+        <button class="p-2 rounded-md hover:bg-gray-200 focus:outline-none" (click)="toggleProfilePanel()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <!-- Links for Bidder -->
+      <div class="flex flex-col p-4 space-y-2 border-b" >
+        <div class="flex items-center">
+          <mat-icon>gavel</mat-icon>
+          <a routerLink="/auctions" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Auction</a>
+        </div>
+        <div class="flex items-center">
+          <mat-icon>insert_chart_outlined</mat-icon>
+          <a routerLink="/leaderboard"
+            class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Leaderboard</a>
+        </div>
+      </div>
+
+      <!-- Links for Seller -->
+      <div class="flex flex-col p-4 space-y-2 border-b" *ngIf="userRole === 'seller'">
+        <div class="flex items-center">
+          <mat-icon>open_in_new</mat-icon>
+          <a routerLink="/createauction" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Create
+            Auction</a>
+        </div>
+        <div class="flex items-center">
+          <mat-icon>offline_bolt</mat-icon>
+          <a routerLink="/profile" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Submit
+            Commission</a>
+        </div>
+      </div>
+
+      <!-- Common Links -->
+      <div class="flex flex-col p-4 space-y-2">
+        <div class="flex items-center">
+          <mat-icon>person</mat-icon>
+          <a routerLink="/profile" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Profile</a>
+        </div>
+        <div class="flex items-center">
+          <mat-icon>supervised_user_circle</mat-icon>
+          <a routerLink="/about" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">About Us</a>
+        </div>
+        <div class="flex items-center">
+          <mat-icon>contact_support</mat-icon>
+          <a routerLink="/contact" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Contact
+            Us</a>
+        </div>
+        <div class="flex items-center">
+          <mat-icon>logout</mat-icon>
+          <a (click)="logout()" class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md">Logout</a>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Side Panel for Profile -->
-  <div
-    class="fixed top-0 right-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out nav-panel"
-    [ngClass]="{ 'translate-x-0': isProfilePanelOpen, 'translate-x-full': !isProfilePanelOpen }"
-  >
-    <div class="p-4 flex items-center justify-between border-b">
-      <span class="text-xl font-bold">Profile Menu</span>
-      <button
-        class="p-2 rounded-md hover:bg-gray-200 focus:outline-none"
-        (click)="toggleProfilePanel()"
-      >
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          ></path>
-        </svg>
-      </button>
-    </div>
-    <div class="flex flex-col p-4 space-y-4 nav-panel">
-      <a
-        routerLink="/home"
-        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
-        >Home</a
-      >
-      <a
-        routerLink="/profile"
-        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
-        >View Profile</a
-      >
-      <a
-        routerLink="/settings"
-        class="text-black hover:text-gray-500 font-medium px-3 py-2 rounded-md"
-        >Settings</a
-      >
-      <button
-        (click)="logout()"
-        class="text-white font-medium px-3 py-2 rounded-md bg-red-500 hover:bg-red-700"
-      >
-        Logout
-      </button>
-    </div>
-  </div>
 </nav>

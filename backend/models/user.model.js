@@ -15,11 +15,68 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, "Password is required"],
         minlength: [8, "Password must be at least 8 characters long"],
+         
     },
+    role:{
+        type:String,
+        enum:["bidder","seller","admin"],
+        default:"bidder",
+    },
+    profileImage: {  
+        public_id:{
+            type:String,
+            required:true
+        },
+        url:{
+            type:String,
+            required:true
+        }
+    }, 
+    paymentMethods:{
+        bankTransfer:{
+            bankAccountNumber:String,
+            bankAccountName:String,
+            bankName:String
+        },
+        paypal:{
+            paypalEmail:String
+        },
+
+
+    },
+
     isVerified: {
         type: Boolean,
         default: false,
     },
+    unpaidCommission:{
+        type:Number,
+        default:0,
+
+    },
+    auctionWon:{
+        type:Number,
+        default:0
+
+    },
+    moneySpent:{
+        type:Number,
+        default:0
+    },
+   
+
+    cartItems:[
+        {
+            quantity:{
+                type:Number,
+                default:1
+            },
+            product:{
+                type:mongoose.Schema.Types.ObjectId,
+                ref:"Product"
+            }
+        }
+    ],
     lastLogin: {
         type: Date,
         default: Date.now,
@@ -32,7 +89,5 @@ const userSchema = new mongoose.Schema({
 }, {
     timestamps: true
 });
-
 const User = mongoose.model("User", userSchema);
-
 export default User;

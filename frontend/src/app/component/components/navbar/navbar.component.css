@@ -1,19 +1,69 @@
-nav,
-.nav-panel {
-box-shadow: 0 8px 32px 0 rgba( 31, 38, 135, 0.37 ) ;
-backdrop-filter: blur( 2.5px ) ;
--webkit-backdrop-filter: blur( 2.5px ) ;
-border-radius: 10px  ;
-border: 1px solid rgba( 255, 255, 255, 0.18 )  ;
-background: linear-gradient(to right, #3b82f6, #6b21a8) !important ;
-
+/* Base Styles */
+nav {
+  background: linear-gradient(to right, #3b82f6, #6b21a8);
+  transition: all 0.3s ease-in-out;
 }
 .nav-panel {
-    will-change: transform;
-    /* backface-visibility: hidden; */
+  will-change: transform;
+  background-color: aliceblue;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Custom Button */
+.custom-btn {
+  background: linear-gradient(to right, #3b82f6, #6b21a8);
+  color: white !important;
+  transition: background 0.3s ease;
+}
+
+.custom-btn:hover {
+  background: linear-gradient(to right, #6b21a8, #3b82f6);
+}
+
+/* Responsive Handling */
+@media (max-width: 1024px) {
+  .hidden.lg\:flex {
+    display: none;
   }
-  
-  .custom-btn{
-    background: linear-gradient(to right, #3b82f6, #6b21a8) !important ;
-    color: white !important;
+}
+
+@media (min-width: 1024px) {
+  .lg\:hidden {
+    display: none;
   }
+}
+
+/* Smooth Mobile Menu Transition */
+.mobile-menu {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+}
+.mobile-menu-open {
+  transform: translateX(0);
+}
+
+/* Overflow Management */
+body {
+  overflow-x: hidden;
+}
+
+
+
+/* Smooth Slide-In Effect */
+.profile-panel {
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile-panel.open {
+  transform: translateX(0);
+}
+
+.profile-panel.closed {
+  transform: translateX(100%);
+}
+
+ 

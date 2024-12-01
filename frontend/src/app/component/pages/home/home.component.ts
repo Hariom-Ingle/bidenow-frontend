@@ -1,9 +1,12 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common'; 
+// import { UserService } from '../../../services/user.service';
+import { ExploreCategoryComponent } from "../../components/explore-category/explore-category.component";
+import { FooterComponent } from "../../components/footer/footer.component";
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ExploreCategoryComponent, FooterComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -53,4 +56,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   padZero(num: number): string {
     return num < 10 ? '0' + num : num.toString();
   }
+
+ 
+ 
 }

@@ -1,14 +1,23 @@
 import express from 'express';
-const app = express();
+import cors from 'cors';
+import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
+
+import cloudinary from './utils/cloudinary.js';
 import connectDB from './db/server.js';
 import userRouter from './routes/user.router.js';
-import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
-dotenv.config();
+import auctionRouter from"./routes/auction_routes.js"
+ 
+import bidRouter from "./routes/bid.routes.js"
+dotenv.config("");
 
+
+
+
+const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
 app.use(cors({
     origin: "http://localhost:4200",
     credentials: true
@@ -18,6 +27,9 @@ const port = process.env.PORT || 5000;
 
 /********** apis *********************/
 app.use("/api/user", userRouter);
+app.use("/api/auction", auctionRouter);
+app.use("/api/bid", bidRouter);
+ 
 
 
 app.listen(port, () => {
