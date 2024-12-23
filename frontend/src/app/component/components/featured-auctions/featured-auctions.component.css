@@ -1,0 +1,75 @@
+/* Slider container */
+.slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  /* Slider track with infinite scrolling */
+  .slider-track {
+    display: flex;
+    animation: scroll 15s linear infinite;
+  }
+  
+  /* Individual slider item */
+  .slider-item {
+    flex: 0 0 auto;
+    width: 300px;
+    margin-right: 20px;
+    border-radius: 10px;
+    background-color: white;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .slider-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Slider image */
+  .slider-item img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #3498db;
+  }
+  
+  /* Keyframes for infinite scrolling */
+  @keyframes scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+  
+  /* Stop scrolling on hover */
+  .slider:hover .slider-track {
+    animation-play-state: paused;
+  }
+  
+  /* Gradient background for card content */
+  .slider-item .p-4 {
+    background: linear-gradient(to bottom, #e0f7fa, #e3f2fd);
+    border-top: 2px solid #3498db;
+  }
+  
+  /* Button styles */
+  .slider-item button {
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+  }
+ 
+  
+  /* Text colors */
+  .slider-item p {
+    margin: 0;
+  }
+  

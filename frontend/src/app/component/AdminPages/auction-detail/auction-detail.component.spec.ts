@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AuctionDialogComponent } from './auction-dialog.component';
+import { AuctionDetailComponent } from './auction-detail.component';
 
-describe('AuctionDialogComponent', () => {
-  let component: AuctionDialogComponent;
-  let fixture: ComponentFixture<AuctionDialogComponent>;
+describe('AuctionDetailComponent', () => {
+  let component: AuctionDetailComponent;
+  let fixture: ComponentFixture<AuctionDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AuctionDialogComponent]
+      imports: [AuctionDetailComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AuctionDialogComponent);
+    fixture = TestBed.createComponent(AuctionDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

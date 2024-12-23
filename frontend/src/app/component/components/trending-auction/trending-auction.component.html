@@ -1,0 +1,53 @@
+<div class="container mx-auto p-6 " id="trending">
+    <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">Trending Auctions</h2>
+    <p class="text-center text-gray-600 mb-12">
+      See what's popular across thousands of items.
+    </p>
+  
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div
+        *ngFor="let item of trendingItems"
+        class="bg-white rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300"
+      >
+        <!-- Image Section -->
+        <div class="relative">
+          <img
+            [src]="item.image?.url"
+            alt="{{ item.title }}"
+            class="w-full h-60 object-cover rounded-t-lg"
+          />
+          <div
+            class="absolute top-0 left-0 bg-gray-800 bg-opacity-50 text-white text-sm py-1 px-2 rounded-bl-lg"
+          >
+            {{ item.category }}
+          </div>
+          <div
+            class="absolute bottom-0 left-0 w-full bg-gray-900 bg-opacity-60 text-white text-center py-2"
+          >
+            {{ countdowns[item.id] }}
+          </div>
+        </div>
+  
+        <!-- Item Details -->
+        <div class="p-4">
+          <h3 class="text-xl font-semibold text-gray-800 mb-2">
+            {{ item.title |slice:0:20 }}
+          </h3>
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-gray-700 text-sm">
+              Starting Bid: <span class="font-bold text-blue-600">${{ item.startingBid }}</span>
+            </span>
+            <span class="text-gray-700 text-sm">
+              Current Bid: <span class="font-bold text-red-600">${{ item.currentBid }}</span>
+            </span>
+          </div>
+          <button
+            class="w-full py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Place Your Bid
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  

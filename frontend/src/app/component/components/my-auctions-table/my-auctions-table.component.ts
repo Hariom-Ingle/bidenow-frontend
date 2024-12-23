@@ -1,35 +1,35 @@
-import { Component, OnInit, inject, viewChild} from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuctionService } from '../../../services/auction-service.service';
 import { MatTableModule } from '@angular/material/table';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedImports } from '../../shared/shared-imports';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import {
   MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
 } from '@angular/material/dialog';
-import {MatMenuModule, MatMenuTrigger} from '@angular/material/menu';
-import { AuctionDialogComponent } from '../auction-dialog/auction-dialog.component';
+import { MatMenuModule, MatMenuTrigger } from '@angular/material/menu';
+ 
 @Component({
   selector: 'app-my-auctions-table',
   standalone: true,
-  imports: [...SharedImports,  MatTableModule, MatMenuModule, HttpClientModule,MatMenuTrigger], // Include necessary imports
+  imports: [...SharedImports, MatTableModule, MatMenuModule, HttpClientModule],
   templateUrl: './my-auctions-table.component.html',
   styleUrls: ['./my-auctions-table.component.css'],
-  providers: [AuctionService,MatMenuTrigger],
+  providers: [AuctionService],
 })
 export class MyAuctionsTableComponent implements OnInit {
   auctions: any[] = []; // Array to hold fetched auction data
   filteredAuctions: any[] = []; // Filtered auctions for display
   searchQuery: string = ''; // Search input binding
   activeFilter: string = 'all'; // Current filter state
-
-  readonly menuTrigger = inject(MatMenuTrigger);
+  dropdownOpen = false;
   readonly dialog = inject(MatDialog);
 
-  constructor(private auctionService: AuctionService, private router: Router) {}
+  constructor(
+    private auctionService: AuctionService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.fetchMyAuctions(); // Fetch auctions when component initializes
@@ -50,9 +50,10 @@ export class MyAuctionsTableComponent implements OnInit {
       },
     });
   }
-
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
   applyFilters(): void {
-    // Filter auctions based on active filter and search query
     this.filteredAuctions = this.auctions.filter((auction) => {
       const matchesFilter =
         this.activeFilter === 'all' ||
@@ -78,38 +79,10 @@ export class MyAuctionsTableComponent implements OnInit {
     this.applyFilters();
   }
 
-  openDialog(action: string, auction: any): void {
-    const dialogRef = this.dialog.open(AuctionDialogComponent, {
-      data: { action, auction },
-    });
-  
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result?.action === 'delete') {
-        this.deleteAuction(result.id); // Pass auction id to delete method
-      } else if (result?.action === 'update') {
-        this.updateAuction(result.id, result.data); // Pass auction id and updated data to update method
-      }
-  
-      // Navigate to the page with auction id as a parameter (for example, for editing)
-      if (result?.action === 'update' || result?.action === 'delete') {
-        this.router.navigate([`/profile/my-auction/${auction.id}`]); // Use auction.id for navigation
-      }
-    });
+  navigateToDetails(auctionId: string): void {
+    this.router.navigate([`/my-auction/${auctionId}`]); // Navigate to auction details page
   }
   
-
-  deleteAuction(id: string): void {
-    this.auctionService.deleteAuction(id).subscribe({
-      next: () => this.fetchMyAuctions(), // Refresh the table
-      error: (error) => console.error('Failed to delete auction:', error),
-    });
-  }
-
-  updateAuction(id: string, updatedData: any): void {
-    this.auctionService.updateAuction(id, updatedData).subscribe({
-      next: () => this.fetchMyAuctions(), // Refresh the table
-      error: (error) => console.error('Failed to update auction:', error),
-    });
-  }
 }
-export class DialogFromMenuExampleDialog {}
+
+   

@@ -1,0 +1,38 @@
+.toast {
+    position: fixed;
+    bottom: -50px; /* Start off-screen */
+    left: 50%;
+    transform: translateX(-50%);
+    /* background: linear-gradient(135deg, #c271f5, #2575fc);  */
+    background: rgb(255, 247, 198);
+    color: #000000;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+    animation: slide-up 0.5s ease-out forwards, fade-out 0.5s 2.5s ease-out forwards; /* Slide up and fade out */
+    z-index: 1000;
+  }
+  
+  @keyframes slide-up {
+    from {
+      bottom: -50px; /* Off-screen position */
+      opacity: 0;
+    }
+    to {
+      bottom: 20px; /* Visible position */
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fade-out {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  

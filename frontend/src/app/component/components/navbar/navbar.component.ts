@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { AuthServiceService } from '../../../services/auth-service.service';
 import { UserServiceService } from '../../../services/user-service.service';
 import { SharedImports } from '../../shared/shared-imports';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -23,7 +23,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private authService: AuthServiceService,
-    private userService: UserServiceService
+    private userService: UserServiceService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +61,9 @@ export class NavbarComponent implements OnInit {
     this.authService.logout().subscribe(() => {
       this.userService.clearUser(); // Update user state globally
       this.isProfilePanelOpen = false; // Close profile panel on logout
+
+      // Redirect to the login page
+      this.router.navigate(['/login']);
     });
   }
 
@@ -70,5 +74,12 @@ export class NavbarComponent implements OnInit {
 
   toggleProfilePanel() {
     this.isProfilePanelOpen = !this.isProfilePanelOpen;
+  }
+
+
+  @Output() sectionNavigate = new EventEmitter<string>();
+
+  navigateToSection(sectionId: string) {
+    this.sectionNavigate.emit(sectionId);
   }
 }

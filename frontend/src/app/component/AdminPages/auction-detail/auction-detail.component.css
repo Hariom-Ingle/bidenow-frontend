@@ -1,0 +1,40 @@
+.auction-detail-container {
+    padding: 20px;
+  }
+  
+  .auction-detail h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .auction-detail p {
+    font-size: 18px;
+    margin: 5px 0;
+  }
+  
+  .actions {
+    margin-top: 20px;
+  }
+  
+  .approve-btn, .reject-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .approve-btn {
+    background-color: green;
+    color: white;
+  }
+  
+  .reject-btn {
+    background-color: red;
+    color: white;
+  }
+  
+  img {
+    margin-top: 15px;
+  }
+  

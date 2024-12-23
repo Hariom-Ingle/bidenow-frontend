@@ -14,6 +14,7 @@ export const addNewAuctionItem = async (req, res) => {
 
         console.log(req.userId);
 
+        
         const { mimetype, path } = req.file;
         const allowedFormats = ["image/jpeg", "image/png", "image/webp"];
         if (!allowedFormats.includes(mimetype)) {
@@ -149,67 +150,156 @@ export const getAuctionDetails = async (req, res) => {
 /****************************** REMOVE FROM AUCTION *******************************/
 
 export const removeFromAuction = async (req, res) => {
-    try {
-        const { id } = req.params; // Get auction item ID from request params
-        const auctionItem = await Auction.findOneAndDelete({ _id: id, createdBy: req.userId });
+    try { 
 
-        if (!auctionItem) {
-            return res.status(404).json({
-                success: false,
-                message: "Auction item not found or you do not have permission to delete it."
-            });
-        }
-
-        return res.status(200).json({
-            success: true,
-            message: "Auction item removed successfully."
+         
+      const { id } = req.params; // Auction ID
+      const { userId } = req.body; // Extract userId from request body
+  
+      const auctionItem = await Auction.findOneAndDelete({ _id: id, createdBy: userId });
+  
+      if (!auctionItem) {
+        return res.status(404).json({
+          success: false,
+          message: "Auction item not found or you do not have permission to delete it."
         });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: "Auction item removed successfully."
+      });
     } catch (error) {
-        console.error("Error removing auction item:", error);
-        return res.status(500).json({
-            success: false,
-            message: "Failed to remove auction item."
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Failed to remove auction item."
+      });
     }
-};
-
+  };
+  
 /****************************** REPUBLISH ITEM   *******************************/
 
 export const republishItem = async (req, res) => {
     try {
+      const { id } = req.params; // Auction ID
+      const {
+        title,
+        description,
+        startingBid,
+        currentBid,
+        startTime,
+        endTime,
+        image,
+        views,
+        userId, // User ID
+      } = req.body; // Extract auction data from request body
+  
+      // Ensure the new end time is in the future
+      if (!endTime || new Date(endTime) <= Date.now()) {
+        return res.status(400).json({
+          success: false,
+          message: "New end time must be in the future.",
+        });
+      }
+  
+      // Prepare the data to update the auction item
+      const updatedData = {
+        title,
+        description,
+        startingBid,
+        currentBid,
+        startTime,
+        endTime,
+        image,
+        views,
+        status: "pending", // Always set status to 'pending'
+        isFeatured: false, // Always set isFeatured to false
+      };
+  
+      // Update the auction item if the user has permission
+      const auctionItem = await Auction.findOneAndUpdate(
+        { _id: id, createdBy: userId }, // Validate userId
+        updatedData,
+        { new: true }
+      );
+  
+      if (!auctionItem) {
+        return res.status(404).json({
+          success: false,
+          message: "Auction item not found or you do not have permission to update it.",
+        });
+      }
+  
+      return res.status(200).json({
+        success: true,
+        message: "Auction item republished successfully.",
+        auctionItem,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: "Failed to republish auction item.",
+      });
+    }
+  };
+  
+
+
+/****************************** INCREMENT VIEW COUNT *******************************/
+export const incrementViewCount = async (req, res) => {
+    try {
         const { id } = req.params; // Get auction item ID from request params
-        const { newEndTime } = req.body; // Get new end time from request body
 
-        if (!newEndTime || new Date(newEndTime) <= Date.now()) {
-            return res.status(400).json({
-                success: false,
-                message: "New end time must be in the future."
-            });
-        }
-
-        const auctionItem = await Auction.findOneAndUpdate(
-            { _id: id, createdBy: req.userId },
-            { endTime: newEndTime },
-            { new: true }
-        );
+        const auctionItem = await Auction.findById(id);
 
         if (!auctionItem) {
             return res.status(404).json({
                 success: false,
-                message: "Auction item not found or you do not have permission to update it."
+                message: "Auction item not found.",
+            });
+        }
+
+        // Increment view count by 1
+        auctionItem.views += 1;
+        await auctionItem.save(); // Save the updated view count
+
+        return res.status(200).json({
+            success: true,
+            message: "View count incremented successfully.",
+        });
+    } catch (error) {
+        console.error("Error incrementing view count:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to increment view count.",
+        });
+    }
+};
+
+/****************************** GET TRENDING PRODUCTS *******************************/
+export const getTrendingProducts = async (req, res) => {
+    try {
+        // Define logic for "trending" products
+        const trendingItems = await Auction.find()
+            .sort({ numberOfBids: -1, views: -1, createdAt: -1 }) // Adjust sorting logic as per your criteria
+            .limit(6); // Fetch top 6 items
+
+        if (trendingItems.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "No trending products found.",
             });
         }
 
         return res.status(200).json({
             success: true,
-            message: "Auction item republished successfully.",
-            auctionItem
+            trendingProducts: trendingItems,
         });
     } catch (error) {
-        console.error("Error republishing auction item:", error);
+        console.error("Error fetching trending products:", error);
         return res.status(500).json({
             success: false,
-            message: "Failed to republish auction item."
+            message: "Failed to fetch trending products.",
         });
     }
 };

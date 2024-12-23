@@ -1,4 +1,4 @@
-<div class=" min-h-screen  text-black flex flex-col items-center justify-center text-center maglicpattern bg-gradient-to-tr from-blue-50 to-blue-200">
+<!-- <div class=" min-h-screen  text-black flex flex-col items-center justify-center text-center maglicpattern bg-gradient-to-tr from-blue-50 to-blue-200">
     <div>
       <h1 class="text-4xl md:text-5xl font-bold mb-6">Welcome to the Future of Online Auctions</h1>
       <p class="text-lg mb-8">Join the auction today and place your bids on exclusive items. Don’t miss out!</p>
@@ -7,7 +7,7 @@
       </a>
     </div>
   
-    <!-- Down Arrow Icon Button with Animation -->
+  
     <button (click)="scrollToSection()" class="mt-8 animate-bounce">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-yellow-300 hover:text-yellow-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -16,9 +16,175 @@
     <nav>
       </nav>
   </div>
-  
+   -->
   <!-- Auction Listings Section -->
+  <div class="min-h-screen flex items-center maglicpattern">
+    <div class="container mx-auto py-10 flex flex-col lg:flex-row justify-between px-4 sm:px-20">
+      <!-- Left Section -->
+      <div class="flex flex-col justify-center mb-8 lg:mb-0  ">
+        <h1 class="text-2xl  mt-11 sm:text-4xl font-extrabold text-center lg:text-left mb-4 text-blue-600 ">
+          Welcome to the Future of Online Auctions
+        </h1>
+   
+  
+        <p class="text-sm sm:text-base text-center lg:text-left text-gray-600 mb-4" *ngIf="!isLoggedIn">
+          Explore auctions, bid on exclusive items, sell your treasures, and connect with collectors worldwide!
+        </p>
+        <p class="text-sm sm:text-base text-center lg:text-left text-gray-600 mb-4" *ngIf="isLoggedIn">
+          Welcome back, <span class="font-semibold text-blue-700">{{ user }} </span> !<br>  Explore new auctions and manage your listings.
+        </p>
+  
+        <div class="text-center lg:text-left">
+          <!-- Auth Buttons -->
+          <div class="mb-4 gap-5 flex items-center justify-center lg:justify-start" *ngIf="!isLoggedIn">
+            <button
+              class="bg-blue-500 text-white py-2 px-4 rounded-full shadow-md flex items-center gap-2 hover:bg-blue-700"
+              (click)="navigateToLogin()"
+            >
+              <mat-icon>login</mat-icon>
+              Login
+            </button>
+            <button
+              class="bg-green-500 text-white py-2 px-4 rounded-full shadow-md flex items-center gap-2 hover:bg-green-700"
+            >
+              <mat-icon>person_add</mat-icon>
+              Register
+            </button>
+          </div>
+        
+          <!-- Seller Actions -->
+          <div
+            class="mb-4 gap-5 flex items-center justify-center lg:justify-start"
+            *ngIf="isLoggedIn && userRole === 'seller'"
+          >
+            <a
+              class="bg-yellow-500 text-white py-2 px-4 rounded-full shadow-md flex items-center gap-2 hover:bg-yellow-600"
+              routerLink="/auctions"
+            >
+              <mat-icon>add_circle</mat-icon>
+              Create Auction
+            </a>
+          </div>
+        
+          <!-- Bidder Actions -->
+          <div
+            class="mb-4 gap-5 flex items-center justify-center lg:justify-start"
+            *ngIf="isLoggedIn && userRole === 'bidder'"
+          >
+            <a
+              class="bg-teal-500 text-white py-2 px-4 rounded-full shadow-md flex items-center gap-2 hover:bg-teal-600"
+              routerLink="/auctions"
+            >
+              <mat-icon>gavel</mat-icon>
+              Place Bids
+            </a>
+          </div>
+          </div>
+         
+        
+      </div>
+  
+      
+      <!-- Cards Section -->
+      <div class="grid grid-cols-2 gap-6 px-4 sm:px-8 lg:pl-36 lg:pr-20 ">
+        <div class="bg-purple-100 rounded-lg shadow-md p-6">
+          <h2 class="text-lg sm:text-xl font-bold text-purple-600">Live Auctions</h2>
+          <p class="text-xs sm:text-sm text-gray-700">Bid on unique items and win incredible deals.</p>
+        </div>
+        <div class="bg-green-100 rounded-lg shadow-md p-6">
+          <h2 class="text-lg sm:text-xl font-bold text-green-600">Sell Your Items</h2>
+          <p class="text-xs sm:text-sm text-gray-700">List your treasures and reach global bidders.</p>
+        </div>
+        <div class="bg-yellow-100 rounded-lg shadow-md p-6">
+          <h2 class="text-lg sm:text-xl font-bold text-yellow-600">Categories</h2>
+          <p class="text-xs sm:text-sm text-gray-700">Explore items from art, electronics, fashion, and more.</p>
+        </div>
+        <div class="bg-blue-50 rounded-lg shadow-md p-6">
+          <h2 class="text-lg sm:text-xl font-bold   text-blue-600">Bidding Strategies</h2>
+          <p class="text-xs sm:text-sm text-gray-700">Learn how to make winning bids effectively.</p>
+        </div>
+        <div class="bg-pink-100 rounded-lg shadow-md p-6">
+          <h2 class="text-lg sm:text-xl font-bold text-pink-600">Featured Items</h2>
+          <p class="text-xs sm:text-sm text-gray-700">Discover exclusive items handpicked for you.</p>
+        </div>
+        <div class="bg-teal-100 rounded-lg shadow-md p-6">
+          <h2 class="text-lg sm:text-xl font-bold text-teal-600">Customer Support</h2>
+          <p class="text-xs sm:text-sm text-gray-700">Get assistance with bidding, selling, and more.</p>
+        </div>
+      </div>
+      
+    </div>
 
-  <app-explore-category></app-explore-category>
+  </div>
+  
+  
+  <section class=" sm:h-screen justify-center"  id="featured">
+
+    <app-featured-auctions ></app-featured-auctions>
+  </section>
+
+  <app-trending-auction id="trending"></app-trending-auction>
+  
+  <section class="bg-white py-12 px-6">
+    <h2 class="text-3xl font-bold text-center mb-8 text-gray-800">How It Works</h2>
+    <div class="flex flex-col items-center space-y-6 md:flex-row md:space-y-0 md:space-x-12 justify-center">
+      <!-- Step 1 -->
+      <div id="step-1" class="flex flex-col items-center text-center step">
+        <div class="logo flex items-center justify-center w-16 h-16 bg-blue-500 text-white rounded-full mb-4">
+          <i class="material-icons">person_add</i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-700">Step 1: Register</h3>
+        <p class="text-gray-600 mt-2">Create your free account to start exploring auctions.</p>
+      </div>
+  
+      <!-- Arrow -->
+      <div id="arrow-1" class="arrow hidden md:block">
+        <i class="material-icons text-blue-400 text-3xl">arrow_forward</i>
+      </div>
+  
+      <!-- Step 2 -->
+      <div id="step-2" class="flex flex-col items-center text-center step">
+        <div class="logo flex items-center justify-center w-16 h-16 bg-green-500 text-white rounded-full mb-4">
+          <i class="material-icons">search</i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-700">Step 2: Explore</h3>
+        <p class="text-gray-600 mt-2">Browse through our exclusive auction categories.</p>
+      </div>
+  
+      <!-- Arrow -->
+      <div id="arrow-2" class="arrow hidden md:block">
+        <i class="material-icons text-green-400 text-3xl">arrow_forward</i>
+      </div>
+  
+      <!-- Step 3 -->
+      <div  id="step-3" class="flex flex-col items-center text-center step ">
+        <div class=" logo flex items-center justify-center w-16 h-16 bg-yellow-500 text-white rounded-full mb-4">
+          <i class="material-icons">gavel</i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-700">Step 3: Bid</h3>
+        <p class="text-gray-600 mt-2">Place your bids and compete to win amazing products.</p>
+      </div>
+  
+      <!-- Arrow -->
+      <div id="arrow-3" class="arrow hidden md:block">
+        <i class="material-icons text-yellow-400 text-3xl">arrow_forward</i>
+      </div>
+  
+  
+      <!-- Step 4 -->
+      <div id="step-4" class="flex flex-col items-center text-center step">
+        <div class=" logo flex items-center justify-center w-16 h-16 bg-red-500 text-white rounded-full mb-4">
+          <i class="material-icons">emoji_events</i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-700">Step 4: Win!</h3>
+        <p class="text-gray-600 mt-2">Claim your prize and enjoy your winnings.</p>
+      </div>
+
+     
+  
+    </div>
+  </section>
+  
+  <!-- <app-explore-category></app-explore-category> -->
   <app-footer>  </app-footer>
   

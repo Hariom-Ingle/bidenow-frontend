@@ -7,7 +7,7 @@ import cloudinary from './utils/cloudinary.js';
 import connectDB from './db/server.js';
 import userRouter from './routes/user.router.js';
 import auctionRouter from"./routes/auction_routes.js"
- 
+ import adminRoutes  from "./routes/admin.routes.js"
 import bidRouter from "./routes/bid.routes.js"
 dotenv.config("");
 
@@ -29,6 +29,7 @@ const port = process.env.PORT || 5000;
 app.use("/api/user", userRouter);
 app.use("/api/auction", auctionRouter);
 app.use("/api/bid", bidRouter);
+app.use('/api/admin', adminRoutes);
  
 
 

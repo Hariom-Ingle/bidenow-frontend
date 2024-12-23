@@ -25,7 +25,7 @@ router.post("/login", login);
 router.post("/logout", logout);
 router.get("/profile", verifyToken, getProfile);
 router.post("/verify-email", verifyEmail);
-router.post("/forgot-password", forgotPassword);
+router.post("/forgot-password", forgotPassword); 
 router.post("/reset-password/:token", resetPassword);
 router.get("/leaderboard", fetchLeaderboard);
 

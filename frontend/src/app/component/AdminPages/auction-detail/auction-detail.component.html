@@ -1,0 +1,121 @@
+<div class="mx-auto p-6 pt-14">
+    <!-- Image and Details Section -->
+    <div class="flex flex-wrap md:flex-nowrap items-start gap-10">
+        <!-- Image Section -->
+        <div class="w-full md:w-1/2 flex justify-center border-2 border-gray-100 p-2 rounded-md">
+            <img [src]="auctionItem?.image?.url" alt="{{ auctionItem?.title }}"
+                class="shadow-lg max-h-96 object-contain" />
+        </div>
+
+        <!-- Details Section -->
+        <div class="w-full md:w-1/2">
+            <div class="flex">
+                <h1 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 border-b-2 border-gray-100 p-2">
+                    {{ auctionItem?.title }}
+                </h1>
+            </div>
+
+            <div class="flex lg:flex-row justify-between">
+                <div class="flex-col justify-center align-middle text-lg text-gray-700 space-y-4 p-2">
+                    <!-- Bid Info Section -->
+                    <div class="flex gap-3">
+                        <span
+                            class="bg-purple-100 text-purple-800 text-center font-medium me-2 px-2.5 py-0.5 rounded border border-purple-400">
+                            Starting Bid: <span class="text-green-700 font-semibold"> $ {{ auctionItem?.startingBid }}
+                            </span>
+                        </span>
+
+                        <span
+                            class="bg-indigo-100 text-indigo-800 text-center font-medium me-2 px-2.5 py-0.5 rounded border border-indigo-400">
+                            Current Bid: <span class="text-green-700 font-semibold"> $ {{ auctionItem?.currentBid }}
+                            </span>
+                        </span>
+                    </div>
+
+                    <!-- Auction Status Section -->
+                    <div class="mt-4 flex gap-4">
+                        <!-- <div class="  text-gray-800 text-center font-medium px-4 py-2 rounded  ">
+                            <span class="font-semibold">Status: </span> 
+                            <span [ngClass]="{
+                                'text-yellow-600': auctionItem?.status === 'pending',
+                                'text-green-600': auctionItem?.status === 'approved',
+                                'text-red-600': auctionItem?.status === 'rejected'
+                            }">{{ auctionItem?.status  }}</span>
+                        </div> -->
+
+
+
+                        <!-- Status Update Feedback -->
+
+                    </div>
+
+                    <!-- Auction Time Section -->
+                    <div class="mt-4">
+                        <div class="text-gray-700">
+                            <span class="font-semibold">Start Time: </span>
+                            <span>{{ auctionItem?.startTime | date: 'short' }}</span>
+                        </div>
+                        <div class="text-gray-700 mt-2">
+                            <span class="font-semibold">End Time: </span>
+                            <span>{{ auctionItem?.endTime | date: 'short' }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Created By Section -->
+                    <div class="mt-4">
+                        <div class="text-gray-700">
+                            <span class="font-semibold">Created By: </span>
+                            <span>{{ auctionItem?.createdBy }}</span>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <!-- Toggle Featured Status -->
+                        <button (click)="toggleFeaturedStatus(auctionItem?._id)" class="flex items-center space-x-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                class="w-6 h-6" [ngClass]="{
+                              'text-yellow-500': auctionItem?.isFeatured,
+                              'text-gray-400': !auctionItem?.isFeatured
+                            }">
+                                <path
+                                    d="M12 .587l3.668 7.431L24 9.588l-6 5.847 1.42 8.287L12 18.896 4.58 23.722 6 15.435 0 9.588l8.332-1.57z" />
+                            </svg>
+                            <span class="text-sm">{{ auctionItem?.isFeatured ? 'Unmark as Featured' : 'Mark as Featured'
+                                }}</span>
+                        </button>
+                    </div>
+                    <div class="mt-4 flex ">
+                        <!-- Approve Button -->
+                        <button (click)="updateAuctionStatus(auctionItem?._id, 'approved')"
+                            class="bg-green-600 text-white px-4 py-2 rounded-md flex items-center space-x-2"
+                            [disabled]="auctionItem?.status === 'approved'">
+                            <ng-container *ngIf="auctionItem?.status === 'approved'; else approveText">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24"
+                                    class="w-6 h-6 text-white">
+                                    <path d="M10 15l-3.5-3.5 1.42-1.42L10 12.17l6.09-6.09L17.5 7.5 10 15z" />
+                                </svg>
+                                <span>Approved</span>
+                            </ng-container>
+                            <ng-template #approveText>
+                                <span>Approve</span>
+                            </ng-template>
+                        </button>
+
+                        <!-- Reject Button -->
+                        <button (click)="updateAuctionStatus(auctionItem?._id, 'rejected')"
+                            class="bg-red-600 text-white px-4 py-2 rounded-md ml-4">
+                            Reject
+                        </button>
+                    </div>
+
+
+                    <!-- Description Section -->
+                    <div class="mt-8 border-2 border-gray-100 p-5">
+                        <h4 class="text-xl font-bold text-gray-800 mb-4">Description</h4>
+                        <p class=" text-sm text-gray-600 mb-6">{{ auctionItem?.description }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-toast></app-toast>

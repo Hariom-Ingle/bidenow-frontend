@@ -1,6 +1,6 @@
 /* Base Styles */
 nav {
-  background: linear-gradient(to right, #3b82f6, #6b21a8);
+  /* background: linear-gradient(to right, #3b82f6, #6b21a8); */
   transition: all 0.3s ease-in-out;
 }
 .nav-panel {
@@ -65,5 +65,7 @@ body {
 .profile-panel.closed {
   transform: translateX(100%);
 }
+
+ 
 
  

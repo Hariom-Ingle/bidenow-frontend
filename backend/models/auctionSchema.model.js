@@ -10,6 +10,19 @@ const auctionSchema = new Schema({
         type:String,
         required:[true,"category is required"]
     },
+    status:{
+        type:String,
+        enum:["pending","approved","rejected"],
+        default:"pending",
+    },
+    isFeatured: {
+        type: Boolean,
+        default: false
+    },
+    views: {
+        type: Number,
+        default: 0,
+    },
     description: {
         type: String,
         required: [true, "Description is required"],

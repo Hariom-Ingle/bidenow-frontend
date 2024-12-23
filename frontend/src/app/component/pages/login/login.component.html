@@ -1,6 +1,6 @@
-<div class="flex items-center flex-col justify-center min-h-screen bg-gradient-to-b from-blue-50 to-blue-100 overflow-hidden">
+<div class="flex items-center flex-col justify-center min-h-screen bg-gradient-to-tr from-blue-50 to-blue-200  overflow-hidden">
   <div
-    class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md animate-slide-up"
+    class="bg-white p-6 rounded-lg shadow-lg w-full max-w-md animate-slide-up "
   >
     <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
       <h1
@@ -72,6 +72,17 @@
               />
               Seller
             </label>
+            <label class="flex items-center">
+              <input
+                type="radio"
+                name="role"
+                value="admin"
+                [(ngModel)]="userData.role"
+                required
+                class="mr-2"
+              />
+              Admin  
+            </label>
           </div>
         </div>
   
@@ -132,3 +143,4 @@
     </div>
   </div>
 </div>
+<app-toast></app-toast>

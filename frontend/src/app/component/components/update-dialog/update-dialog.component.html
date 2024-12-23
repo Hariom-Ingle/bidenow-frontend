@@ -1,0 +1,82 @@
+<!-- Dialog Title -->
+<h1 class="text-xl font-semibold text-gray-800 mb-6 text-center mt-2">Update Auction</h1>
+
+<!-- Dialog Content -->
+<div class="space-y-4 p-4 rounded-none">
+  <form #updateForm="ngForm">
+    <!-- Title Field -->
+    <div class="flex flex-col space-y-2">
+      <label for="title" class="font-medium text-gray-700">Title</label>
+      <input 
+        id="title"
+        type="text" 
+        [(ngModel)]="data.title" 
+        name="title" 
+        required
+        class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      />
+    </div>
+
+  
+
+  
+    <!-- Starting Bid Field -->
+    <div class="flex flex-col space-y-2">
+      <label for="startingBid" class="font-medium text-gray-700">Starting Bid</label>
+      <input 
+        id="startingBid"
+        type="number" 
+        [(ngModel)]="data.startingBid" 
+        name="startingBid" 
+        required
+        class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      />
+    </div>
+
+    <!-- Start Time Field -->
+    <div class="flex flex-col space-y-2">
+      <label for="startTime" class="font-medium text-gray-700">Start Time</label>
+      <input 
+        id="startTime"
+        type="datetime-local" 
+        [(ngModel)]="data.startTime" 
+        name="startTime" 
+        required
+        class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      />
+    </div>
+
+    <!-- End Time Field -->
+    <div class="flex flex-col space-y-2">
+      <label for="endTime" class="font-medium text-gray-700">End Time</label>
+      <input 
+        id="endTime"
+        type="datetime-local" 
+        [(ngModel)]="data.endTime" 
+        name="endTime" 
+        required
+        class="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" 
+      />
+    </div>
+
+    <!-- Image URL Field -->
+
+  </form>
+</div>
+
+<!-- Dialog Actions -->
+<div class="flex justify-center gap-4 mt-4  py-4">
+  <button 
+    mat-button 
+    (click)="onCancel()" 
+    class="text-gray-600 border border-gray-300 py-2 px-4 rounded-md hover:bg-gray-100">
+    Cancel
+  </button>
+  <button 
+    mat-raised-button 
+    color="primary" 
+    (click)="onSave()" 
+    class="bg-blue-500 text-black py-1 px-2 rounded-md hover:bg-blue-600">
+    Save
+  </button>
+</div>

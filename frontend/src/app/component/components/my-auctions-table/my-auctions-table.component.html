@@ -1,13 +1,10 @@
-<div class="flex  justify-between flex-col mb-4 gap-4">
+<div class="flex justify-between flex-col mb-4 gap-4">
+  <div>
+    <h2 class="sm:text-3xl text-2xl font-bold text-gray-800">My Auctions</h2>
+  </div>
 
-    <div >
-      <h2 class="sm:text-3xl text-2xl font-bold text-gray-800">My Auctions</h2>
-    </div>
-    
-    <div class="flex   justify-between">
-
-   
-    <!-- Search Input (Left Side) -->
+  <div class="flex justify-between items-center relative z-10">
+    <!-- Search Input -->
     <div class="flex items-center">
       <input
         type="text"
@@ -16,11 +13,11 @@
         (input)="onSearchChange($event)"
       />
     </div>
-  
-    <!-- Filter Buttons (Right Side) -->
-    <div class="flex gap-2">
+
+    <!-- Filter Buttons (for large screens) -->
+    <div class="hidden sm:flex gap-2 z-50">
       <button
-        class="filture-button px-4 py-2 text-sm font-medium text-gray-700 hover:text-black   bg-gray-100 border border-gray-300 rounded-lg hover:bg-blue-100"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border rounded-lg hover:bg-blue-100"
         [class.bg-blue-500]="activeFilter === 'all'"
         [class.text-white]="activeFilter === 'all'"
         (click)="onFilterChange('all')"
@@ -28,7 +25,7 @@
         All
       </button>
       <button
-        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-blue-100"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border rounded-lg hover:bg-blue-100"
         [class.bg-blue-500]="activeFilter === 'live'"
         [class.text-white]="activeFilter === 'live'"
         (click)="onFilterChange('live')"
@@ -36,7 +33,7 @@
         Live
       </button>
       <button
-        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-blue-100"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border rounded-lg hover:bg-blue-100"
         [class.bg-blue-500]="activeFilter === 'upcoming'"
         [class.text-white]="activeFilter === 'upcoming'"
         (click)="onFilterChange('upcoming')"
@@ -44,7 +41,7 @@
         Upcoming
       </button>
       <button
-        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded-lg hover:bg-blue-100"
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border rounded-lg hover:bg-blue-100"
         [class.bg-blue-500]="activeFilter === 'history'"
         [class.text-white]="activeFilter === 'history'"
         (click)="onFilterChange('history')"
@@ -52,50 +49,102 @@
         History
       </button>
     </div>
+
+    <!-- Filter Dropdown (for small screens) -->
+    <div class="sm:hidden relative">
+      <button
+        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 border rounded-lg hover:bg-blue-100"
+        id="filterDropdown"
+        (click)="toggleDropdown()"
+      >
+        Filter
+      </button>
+      <div
+        *ngIf="dropdownOpen"
+        class="absolute right-0 w-40 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50"
+      >
+        <button
+          class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+          [class.bg-blue-500]="activeFilter === 'all'"
+          [class.text-white]="activeFilter === 'all'"
+          (click)="onFilterChange('all')"
+        >
+          All
+        </button>
+        <button
+          class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+          [class.bg-blue-500]="activeFilter === 'live'"
+          [class.text-white]="activeFilter === 'live'"
+          (click)="onFilterChange('live')"
+        >
+          Live
+        </button>
+        <button
+          class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+          [class.bg-blue-500]="activeFilter === 'upcoming'"
+          [class.text-white]="activeFilter === 'upcoming'"
+          (click)="onFilterChange('upcoming')"
+        >
+          Upcoming
+        </button>
+        <button
+          class="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+          [class.bg-blue-500]="activeFilter === 'history'"
+          [class.text-white]="activeFilter === 'history'"
+          (click)="onFilterChange('history')"
+        >
+          History
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="relative overflow-x-auto shadow-md sm:rounded-lg -z-0">
+  <table class="w-full text-sm text-left text-gray-500">
+    <thead class="text-xs text-gray-700 uppercase bg-gray-50 z-0">
+      <tr>
+        <th scope="col" class="px-6 py-3">Title</th>
+        <th scope="col" class="px-6 py-3">Category</th>
+        <th scope="col" class="px-6 py-3">Starting Bid</th>
+        <th scope="col" class="px-6 py-3">Current Bid</th>
+        <th scope="col" class="px-6 py-3">Start Time</th>
+        <th scope="col" class="px-6 py-3">End Time</th>
+        <th scope="col" class="px-6 py-3">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr
+        class="bg-white border-b hover:bg-gray-50"
+        *ngFor="let auction of filteredAuctions"
+      >
+        <td class="px-6 py-4 font-medium text-gray-900">{{ auction.title |slice:0:20 }}</td>
+        <td class="px-6 py-4">{{ auction.category }}</td>
+        <td class="px-6 py-4">₹{{ auction.startingBid }}</td>
+        <td class="px-6 py-4">
+          <span
+            class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded-full"
+            >₹{{ auction.currentBid }}</span
+          >
+        </td>
+        <td class="px-6 py-4">{{ auction.startTime | date: 'medium' }}</td>
+        <td class="px-6 py-4">{{ auction.endTime | date: 'medium' }}</td>
+        <td class="px-6 py-4">
+          <button
+            class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600"
+            (click)="navigateToDetails(auction._id)"
+          >
+            View Details
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="filteredAuctions.length === 0" class="text-center p-4 px-12">
+    <p class="text-md sm:text-lg font-semibold text-gray-700 py-12">
+      No auctions found. <br> 
+      <span class="text-blue-700 text-md">Create an auction to get started and reach a wider audience!</span> 
+    </p>
   </div>
-  
-  <!-- Auctions Table -->
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-          <th scope="col" class="px-6 py-3">Title</th>
-          <th scope="col" class="px-6 py-3">Category</th>
-          <th scope="col" class="px-6 py-3">Starting Bid</th>
-          <th scope="col" class="px-6 py-3">Current Bid</th>
-          <th scope="col" class="px-6 py-3">Start Time</th>
-          <th scope="col" class="px-6 py-3">End Time</th>
-          <th scope="col" class="px-6 py-3">
-            Action
-        </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="bg-white border-b hover:bg-gray-50"
-          *ngFor="let auction of filteredAuctions"
-        >
-          <td class="px-6 py-4 font-medium text-gray-900">{{ auction.title }}</td>
-          <td class="px-6 py-4">{{ auction.category }}</td>
-          <td class="px-6 py-4">₹{{ auction.startingBid }}</td>
-          <td class="px-6 py-4"> <span class="bg-yellow-100 text-yellow-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full   " >₹{{ auction.currentBid }}</span>
-          </td>
-          <td class="px-6 py-4">{{ auction.startTime | date: 'medium' }}</td>
-          <td class="px-6 py-4">{{ auction.endTime | date: 'medium' }}</td>
-          <td class="px-6 py-4">
-            <mat-icon class="text-black" [matMenuTriggerFor]="menu" #menuTrigger>more_horiz</mat-icon>
-          </td>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="openDialog('update', auction)">Update</button>
-            <button mat-menu-item (click)="openDialog('delete', auction)">Delete</button>
-          </mat-menu>
-          
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
-  
-  
+</div>

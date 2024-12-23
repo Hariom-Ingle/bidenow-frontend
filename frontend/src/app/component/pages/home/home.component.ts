@@ -1,62 +1,94 @@
 import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common'; 
-// import { UserService } from '../../../services/user.service';
-import { ExploreCategoryComponent } from "../../components/explore-category/explore-category.component";
+import { CommonModule } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { UserServiceService } from '../../../services/user-service.service';
+import { SharedImports } from '../../shared/shared-imports';
+import { FeaturedAuctionsComponent } from "../../components/featured-auctions/featured-auctions.component";
 import { FooterComponent } from "../../components/footer/footer.component";
+import { ExploreCategoryComponent } from "../../components/explore-category/explore-category.component";
+import { TrendingAuctionComponent } from "../../components/trending-auction/trending-auction.component";
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, ExploreCategoryComponent, FooterComponent],
+  imports: [SharedImports, CommonModule, RouterLink, FeaturedAuctionsComponent, FooterComponent, ExploreCategoryComponent, TrendingAuctionComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrls: ['./home.component.css'],
+  providers: [UserServiceService],
 })
-
 export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('auctionListings') auctionListings!: ElementRef;
 
-  scrollToSection(): void {
-    this.auctionListings.nativeElement.scrollIntoView({ behavior: 'smooth' });
-  }
-  isActive: boolean = true;
+  isLoggedIn = false;
+  user: string = '';
+  userProfileImage: string = '';
+  userRole: string = '';
+  private userStateSubscription: any;
 
-
-  timeLeft: number = 2 * 60 * 60 + 45 * 60 + 30; // 2 hours, 45 minutes, 30 seconds in seconds
-  displayTime: string = '';
-  private timerInterval: any;
+  constructor(private userService: UserServiceService, private router: Router) {}
 
   ngOnInit(): void {
-    this.startTimer();
+    this.listenToUserState();
+    this.userService.initializeUserFromLocalStorage();
+    this.animateSteps();
   }
 
   ngOnDestroy(): void {
-    clearInterval(this.timerInterval); // Clear interval on component destroy to prevent memory leaks
+    if (this.userStateSubscription) {
+      this.userStateSubscription.unsubscribe(); // Prevent memory leaks
+    }
   }
 
-  startTimer() {
-    this.updateDisplayTime(); // Initial display update
-
-    this.timerInterval = setInterval(() => {
-      if (this.timeLeft > 0) {
-        this.timeLeft--;
-        this.updateDisplayTime();
+  // Listen to user state changes in real-time
+  private listenToUserState(): void {
+    this.userStateSubscription = this.userService.user$.subscribe((user) => {
+      this.isLoggedIn = !!user;
+      if (user) {
+        this.user = user.username.split(' ')[0]  || '';
+        this.userProfileImage = user.profileImage || '';
+        this.userRole = user.role || '';
       } else {
-        clearInterval(this.timerInterval); // Stop the timer when it reaches zero
+        this.resetUserState();
       }
-    }, 1000);
+    });
   }
 
-  updateDisplayTime() {
-    const hours = Math.floor(this.timeLeft / 3600);
-    const minutes = Math.floor((this.timeLeft % 3600) / 60);
-    const seconds = this.timeLeft % 60;
-    
-    this.displayTime = `${this.padZero(hours)}:${this.padZero(minutes)}:${this.padZero(seconds)}`;
+  // Reset local user-related states
+  private resetUserState(): void {
+    this.isLoggedIn = false;
+    this.user = '';
+    this.userProfileImage = '';
+    this.userRole = '';
   }
 
-  padZero(num: number): string {
-    return num < 10 ? '0' + num : num.toString();
+  // Navigate to login page
+  navigateToLogin(): void {
+    this.router.navigate(['/login']);
   }
+
+  currentStep: number = 1; // Start with Step 1
 
  
- 
+
+  animateSteps() {
+    const totalSteps = 4; // Total number of steps
+    setInterval(() => {
+      // Remove active class from all steps and arrows
+      for (let i = 1; i <= totalSteps; i++) {
+        const logo = document.getElementById(`step-${i}`)?.querySelector('.logo');
+        const arrow = document.getElementById(`arrow-${i}`);
+        logo?.classList.remove('active');
+        arrow?.classList.remove('active');
+      }
+
+      // Highlight the current step and arrow
+      const currentLogo = document.getElementById(`step-${this.currentStep}`)?.querySelector('.logo');
+      const currentArrow = document.getElementById(`arrow-${this.currentStep}`);
+      currentLogo?.classList.add('active');
+      currentArrow?.classList.add('active');
+
+      // Increment step or loop back to the first step
+      this.currentStep = this.currentStep < totalSteps ? this.currentStep + 1 : 1;
+    }, 2000); // Change step every 2 seconds
+  }
 }

@@ -1,0 +1,7 @@
+/* Optional: Customize the background of the dialog */
+.mat-dialog-container {
+    background-color: white;
+    border-radius: 8px; /* Rounded corners for the dialog */
+    padding: 20px; /* Add padding inside the dialog */
+  }
+  

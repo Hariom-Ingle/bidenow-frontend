@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { SharedImports } from '../../shared/shared-imports';
-// import { AuthServiceService } from '../../services/auth-service.service';
 import { AuthServiceService } from '../../../services/auth-service.service';
+
 @Component({
   selector: 'app-register',
   standalone: true,
@@ -20,6 +20,7 @@ export class RegisterComponent {
   };
   profileImage: File | null = null; // Holds the selected profile image file
   errorMessage: string | null = null;
+  loading: boolean = false; // Loading state for the registration process
 
   constructor(private router: Router, private authService: AuthServiceService) {}
 
@@ -39,6 +40,7 @@ export class RegisterComponent {
       this.userData.role &&
       this.profileImage
     ) {
+      this.loading = true; // Show loader while processing registration
       this.authService
         .registerUser(this.userData, this.profileImage)
         .subscribe({
@@ -50,6 +52,9 @@ export class RegisterComponent {
             console.error('Registration error:', error);
             this.errorMessage = error?.error?.message || 'Registration failed.';
           },
+          complete: () => {
+            this.loading = false; // Hide loader after the request is completed
+          }
         });
     } else {
       this.errorMessage = 'All fields are required, including profile image.';

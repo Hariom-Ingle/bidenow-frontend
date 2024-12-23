@@ -15,6 +15,11 @@ import { UserServiceService } from './services/user-service.service';
 import { AuctionDetailsComponent } from './component/pages/auction-details/auction-details.component';
 import { AuctioneerProfileComponent } from './component/pages/auctioneer-profile/auctioneer-profile.component';
 import { MyAuctionsTableComponent } from './component/components/my-auctions-table/my-auctions-table.component';
+import { AdminDashboardComponent } from './component/AdminPages/admin-dashboard/admin-dashboard.component';
+import { UserDetailsComponent } from './component/AdminPages/user-details/user-details.component';
+import { AuctionDetailComponent } from './component/AdminPages/auction-detail/auction-detail.component';
+import { MyauctionDetailsComponent } from './component/components/myauction-details/myauction-details.component';
+
 export const routes: Routes = [
   // Auth Paths
   { path: '', component: HomeComponent },
@@ -42,7 +47,15 @@ export const routes: Routes = [
   { path: 'contact', component: ContactUsComponent },
   
   // { path: '**', redirectTo: '', pathMatch: 'full' }, // Fallback route
-
+  
+  { path: 'admindashboard', component: AdminDashboardComponent },
+  { path: 'user-details/:id', component: UserDetailsComponent },
+  { path: 'auction-detail/:id', component:  AuctionDetailComponent },
+  {
+    path: 'my-auction/:id',
+    component:MyauctionDetailsComponent,
+  }
+  
 
 ];
 
